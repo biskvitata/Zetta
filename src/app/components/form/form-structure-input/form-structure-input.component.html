@@ -1,7 +1,9 @@
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <mat-label>Enter JSON here</mat-label>
+<mat-form-field>
+  <mat-label>Enter JSON here</mat-label>
 
-    <textarea matInput (input)="onValueChange($event)"></textarea>
-  </mat-form-field>
-</form>
+  <textarea matInput (input)="onValueChange($event)"></textarea>
+
+  <mat-hint *ngIf="showErrorMessage"
+    >Please provide correct JSON structure</mat-hint
+  >
+</mat-form-field>

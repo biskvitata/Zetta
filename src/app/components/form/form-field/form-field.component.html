@@ -10,6 +10,11 @@
         formControlName="{{ field.key }}"
         [placeholder]="field.placeholder"
       />
+      @if (form.controls[field.key].errors?.['required']) {
+      <mat-error>{{ field.label }} is required</mat-error>
+      } @if (form.controls[field.key].errors?.['pattern']) {
+      <mat-error>Please enter valid {{ field.label }}</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field
@@ -22,7 +27,30 @@
         formControlName="{{ field.key }}"
         [placeholder]="field.placeholder"
       ></textarea>
+      @if (form.controls[field.key].errors?.['required']) {
+      <mat-error>{{ field.label }} is required</mat-error>
+      }
     </mat-form-field>
+
+    <mat-form-field *ngIf="field.type === 'Dropdown'">
+      <mat-label>{{ field.label }}</mat-label>
+
+      <mat-select formControlName="{{ field.key }}">
+        @for (option of field.options; track option) {
+        <mat-option [value]="option">{{ option }}</mat-option>
+        }
+      </mat-select>
+
+      @if (form.controls[field.key].errors?.['required']) {
+      <mat-error>{{ field.label }} is required</mat-error>
+      }
+    </mat-form-field>
+
+    <ng-container *ngIf="field.type === 'Checkbox'">
+      <mat-checkbox formControlName="{{ field.key }}">{{
+        field.label
+      }}</mat-checkbox>
+    </ng-container>
 
     <ng-container *ngIf="field.type === 'Radio button'">
       <label id="example-radio-group-label">{{ field.label }}</label>
@@ -38,22 +66,6 @@
         }}</mat-radio-button>
         }
       </mat-radio-group>
-    </ng-container>
-
-    <mat-form-field *ngIf="field.type === 'Dropdown'">
-      <mat-label>{{ field.label }}</mat-label>
-
-      <mat-select formControlName="{{ field.key }}">
-        @for (option of field.options; track option) {
-        <mat-option [value]="option">{{ option }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-
-    <ng-container *ngIf="field.type === 'Checkbox'">
-      <mat-checkbox formControlName="{{ field.key }}">{{
-        field.label
-      }}</mat-checkbox>
     </ng-container>
 
     <div *ngIf="field.type === 'Group'" formGroupName="{{ field.key }}">
