@@ -50,11 +50,11 @@
       </mat-select>
     </mat-form-field>
 
-    <input
-      *ngIf="field.type === 'Checkbox'"
-      type="checkbox"
-      formControlName="{{ field.key }}"
-    />
+    <ng-container *ngIf="field.type === 'Checkbox'">
+      <mat-checkbox formControlName="{{ field.key }}">{{
+        field.label
+      }}</mat-checkbox>
+    </ng-container>
 
     <div *ngIf="field.type === 'Group'" formGroupName="{{ field.key }}">
       <app-form-field
