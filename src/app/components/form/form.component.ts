@@ -7,7 +7,7 @@ import { FormGroupComponent } from './form-group/form-group.component';
 
 @Component({
   selector: 'app-form',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, FormStructureInputComponent, FormGroupComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormStructureInputComponent, FormGroupComponent],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })

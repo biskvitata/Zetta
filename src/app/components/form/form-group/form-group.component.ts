@@ -7,10 +7,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { FormTextComponent } from '../form-text/form-text.component';
+import { FormTextareaComponent } from '../form-textarea/form-textarea.component';
 
 @Component({
   selector: 'app-form-group',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatCheckboxModule, FormTextComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatCheckboxModule, FormTextComponent, FormTextareaComponent],
   templateUrl: './form-group.component.html',
   styleUrl: './form-group.component.scss'
 })

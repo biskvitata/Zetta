@@ -8,20 +8,11 @@
       [field]="field"
     ></app-form-text>
 
-    <mat-form-field
+    <app-form-textarea
       *ngIf="field.type === 'Textarea'"
-      class="example-full-width"
-    >
-      <mat-label>{{ field.label }}</mat-label>
-      <textarea
-        matInput
-        formControlName="{{ field.key }}"
-        [placeholder]="field.placeholder"
-      ></textarea>
-      @if (form.controls[field.key].errors?.['required']) {
-      <mat-error>{{ field.label }} is required</mat-error>
-      }
-    </mat-form-field>
+      [control]="getFormControl(field)"
+      [field]="field"
+    ></app-form-textarea>
 
     <mat-form-field *ngIf="field.type === 'Dropdown'">
       <mat-label>{{ field.label }}</mat-label>

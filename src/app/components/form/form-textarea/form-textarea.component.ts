@@ -3,12 +3,12 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-form-text',
+  selector: 'app-form-textarea',
   imports: [ReactiveFormsModule, MatInputModule],
-  templateUrl: './form-text.component.html',
-  styleUrl: './form-text.component.scss'
+  templateUrl: './form-textarea.component.html',
+  styleUrl: './form-textarea.component.scss'
 })
-export class FormTextComponent {
+export class FormTextareaComponent {
   @Input() control!: FormControl;
   @Input() field!: any;
 }
