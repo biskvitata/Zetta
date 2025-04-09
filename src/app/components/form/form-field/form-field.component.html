@@ -12,6 +12,18 @@
       />
     </mat-form-field>
 
+    <mat-form-field
+      *ngIf="field.type === 'Textarea'"
+      class="example-full-width"
+    >
+      <mat-label>{{ field.label }}</mat-label>
+      <textarea
+        matInput
+        formControlName="{{ field.key }}"
+        [placeholder]="field.placeholder"
+      ></textarea>
+    </mat-form-field>
+
     <ng-container *ngIf="field.type === 'Radio button'">
       <label id="example-radio-group-label">{{ field.label }}</label>
 
@@ -27,12 +39,6 @@
         }
       </mat-radio-group>
     </ng-container>
-
-    <textarea
-      *ngIf="field.type === 'Textarea'"
-      formControlName="{{ field.key }}"
-      [placeholder]="field.placeholder"
-    ></textarea>
 
     <select *ngIf="field.type === 'Dropdown'" formControlName="{{ field.key }}">
       <option *ngFor="let option of field.options" [value]="option">
