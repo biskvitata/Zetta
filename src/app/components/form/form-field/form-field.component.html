@@ -1,12 +1,16 @@
 <div *ngFor="let field of config.fields">
   <ng-container [formGroup]="form">
-    <label>{{ field.label }}</label>
+    <label *ngIf="field.type === 'Group'">{{ field.label }}</label>
 
-    <input
-      *ngIf="field.type === 'Text'"
-      formControlName="{{ field.key }}"
-      [placeholder]="field.placeholder"
-    />
+    <mat-form-field *ngIf="field.type === 'Text'" class="example-form-field">
+      <mat-label>{{ field.label }}</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="{{ field.key }}"
+        [placeholder]="field.placeholder"
+      />
+    </mat-form-field>
 
     <textarea
       *ngIf="field.type === 'Textarea'"
