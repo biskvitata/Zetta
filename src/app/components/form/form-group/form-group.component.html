@@ -1,21 +1,12 @@
 <div *ngFor="let field of config.fields">
-  <ng-container [formGroup]="form">
+  <form [formGroup]="form">
     <label *ngIf="field.type === 'Group'">{{ field.label }}</label>
 
-    <mat-form-field *ngIf="field.type === 'Text'" class="example-form-field">
-      <mat-label>{{ field.label }}</mat-label>
-      <input
-        matInput
-        type="text"
-        formControlName="{{ field.key }}"
-        [placeholder]="field.placeholder"
-      />
-      @if (form.controls[field.key].errors?.['required']) {
-      <mat-error>{{ field.label }} is required</mat-error>
-      } @if (form.controls[field.key].errors?.['pattern']) {
-      <mat-error>Please enter valid {{ field.label }}</mat-error>
-      }
-    </mat-form-field>
+    <app-form-text
+      *ngIf="field.type === 'Text'"
+      [control]="getFormControl(field)"
+      [field]="field"
+    ></app-form-text>
 
     <mat-form-field
       *ngIf="field.type === 'Textarea'"
@@ -69,10 +60,10 @@
     </ng-container>
 
     <div *ngIf="field.type === 'Group'" formGroupName="{{ field.key }}">
-      <app-form-field
+      <app-form-group
         [form]="getFormGroup(field)"
         [config]="field"
-      ></app-form-field>
+      ></app-form-group>
     </div>
-  </ng-container>
+  </form>
 </div>

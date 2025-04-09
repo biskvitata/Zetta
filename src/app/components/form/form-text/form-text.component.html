@@ -1,0 +1,14 @@
+<mat-form-field class="example-form-field">
+  <mat-label>{{ field.label }}</mat-label>
+  <input
+    matInput
+    type="text"
+    [formControl]="control"
+    [placeholder]="field.placeholder"
+  />
+  @if (control.errors?.['required']) {
+  <mat-error>{{ field.label }} is required</mat-error>
+  } @if (control.errors?.['pattern']) {
+  <mat-error>Please enter valid {{ field.label }}</mat-error>
+  }
+</mat-form-field>
