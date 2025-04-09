@@ -1,30 +1,60 @@
 <div *ngFor="let field of config.fields">
   <ng-container [formGroup]="form">
-    <label>{{ field.label }}</label>
+    <label *ngIf="field.type === 'Group'">{{ field.label }}</label>
 
-    <input
-      *ngIf="field.type === 'Text'"
-      formControlName="{{ field.key }}"
-      [placeholder]="field.placeholder"
-    />
+    <mat-form-field *ngIf="field.type === 'Text'" class="example-form-field">
+      <mat-label>{{ field.label }}</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="{{ field.key }}"
+        [placeholder]="field.placeholder"
+      />
+    </mat-form-field>
 
-    <textarea
+    <mat-form-field
       *ngIf="field.type === 'Textarea'"
-      formControlName="{{ field.key }}"
-      [placeholder]="field.placeholder"
-    ></textarea>
+      class="example-full-width"
+    >
+      <mat-label>{{ field.label }}</mat-label>
+      <textarea
+        matInput
+        formControlName="{{ field.key }}"
+        [placeholder]="field.placeholder"
+      ></textarea>
+    </mat-form-field>
 
-    <select *ngIf="field.type === 'Dropdown'" formControlName="{{ field.key }}">
-      <option *ngFor="let option of field.options" [value]="option">
-        {{ option }}
-      </option>
-    </select>
+    <ng-container *ngIf="field.type === 'Radio button'">
+      <label id="example-radio-group-label">{{ field.label }}</label>
 
-    <input
-      *ngIf="field.type === 'Checkbox'"
-      type="checkbox"
-      formControlName="{{ field.key }}"
-    />
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        formControlName="{{ field.key }}"
+      >
+        @for (option of field.options; track option) {
+        <mat-radio-button class="example-radio-button" [value]="option">{{
+          option
+        }}</mat-radio-button>
+        }
+      </mat-radio-group>
+    </ng-container>
+
+    <mat-form-field *ngIf="field.type === 'Dropdown'">
+      <mat-label>{{ field.label }}</mat-label>
+
+      <mat-select formControlName="{{ field.key }}">
+        @for (option of field.options; track option) {
+        <mat-option [value]="option">{{ option }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <ng-container *ngIf="field.type === 'Checkbox'">
+      <mat-checkbox formControlName="{{ field.key }}">{{
+        field.label
+      }}</mat-checkbox>
+    </ng-container>
 
     <div *ngIf="field.type === 'Group'" formGroupName="{{ field.key }}">
       <app-form-field
