@@ -1,20 +1,25 @@
 import { Component } from '@angular/core';
 import { FormStructureInputComponent } from './form-structure-input/form-structure-input.component';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { FormFieldComponent } from './form-field/form-field.component';
 
 @Component({
   selector: 'app-form',
-  imports: [FormStructureInputComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, FormStructureInputComponent, FormFieldComponent],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
 export class FormComponent {
   formStructure: any;
   form!: FormGroup;
+  formReady: boolean = false;
 
   constructor(private fb: FormBuilder) {}
   
   onJSONInputChange(value: string) {
+    this.formReady = false;
     this.formStructure = JSON.parse(value);
     this.buildForm();
   }
@@ -29,6 +34,7 @@ export class FormComponent {
         this.form.addControl(field.key, new FormControl('', validators));
       }
     });
+    this.formReady = true;
   }
 
   createGroup(fields: any[]): FormGroup {
@@ -51,5 +57,9 @@ export class FormComponent {
       if (validation.regex) validators.push(Validators.pattern(validation.regex));
     }
     return validators;
+  }
+
+  submit() {
+    console.log(this.form.value);
   }
 }

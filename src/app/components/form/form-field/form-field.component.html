@@ -1,0 +1,36 @@
+<div *ngFor="let field of config.fields">
+  <ng-container [formGroup]="form">
+    <label>{{ field.label }}</label>
+
+    <input
+      *ngIf="field.type === 'Text'"
+      formControlName="{{ field.key }}"
+      [placeholder]="field.placeholder"
+    />
+
+    <textarea
+      *ngIf="field.type === 'Textarea'"
+      formControlName="{{ field.key }}"
+      [placeholder]="field.placeholder"
+    ></textarea>
+
+    <select *ngIf="field.type === 'Dropdown'" formControlName="{{ field.key }}">
+      <option *ngFor="let option of field.options" [value]="option">
+        {{ option }}
+      </option>
+    </select>
+
+    <input
+      *ngIf="field.type === 'Checkbox'"
+      type="checkbox"
+      formControlName="{{ field.key }}"
+    />
+
+    <div *ngIf="field.type === 'Group'" formGroupName="{{ field.key }}">
+      <app-form-field
+        [form]="getFormGroup(field)"
+        [config]="field"
+      ></app-form-field>
+    </div>
+  </ng-container>
+</div>
