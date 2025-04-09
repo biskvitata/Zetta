@@ -12,6 +12,22 @@
       />
     </mat-form-field>
 
+    <ng-container *ngIf="field.type === 'Radio button'">
+      <label id="example-radio-group-label">{{ field.label }}</label>
+
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        formControlName="{{ field.key }}"
+      >
+        @for (option of field.options; track option) {
+        <mat-radio-button class="example-radio-button" [value]="option">{{
+          option
+        }}</mat-radio-button>
+        }
+      </mat-radio-group>
+    </ng-container>
+
     <textarea
       *ngIf="field.type === 'Textarea'"
       formControlName="{{ field.key }}"
