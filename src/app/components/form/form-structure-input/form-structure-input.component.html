@@ -1,1 +1,7 @@
-<p>form-structure-input works!</p>
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <mat-label>Enter JSON here</mat-label>
+
+    <textarea matInput (input)="onValueChange($event)"></textarea>
+  </mat-form-field>
+</form>
