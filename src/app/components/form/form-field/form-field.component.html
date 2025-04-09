@@ -40,11 +40,15 @@
       </mat-radio-group>
     </ng-container>
 
-    <select *ngIf="field.type === 'Dropdown'" formControlName="{{ field.key }}">
-      <option *ngFor="let option of field.options" [value]="option">
-        {{ option }}
-      </option>
-    </select>
+    <mat-form-field *ngIf="field.type === 'Dropdown'">
+      <mat-label>{{ field.label }}</mat-label>
+
+      <mat-select formControlName="{{ field.key }}">
+        @for (option of field.options; track option) {
+        <mat-option [value]="option">{{ option }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
     <input
       *ngIf="field.type === 'Checkbox'"
