@@ -18,10 +18,13 @@ export class FormComponent {
 
   constructor(private fb: FormBuilder) {}
   
-  onJSONInputChange(value: string) {
+  onJSONInputChange(JSON: JSON | null) {
     this.formReady = false;
-    this.formStructure = JSON.parse(value);
-    this.buildForm();
+
+    if (JSON) {
+      this.formStructure = JSON;
+      this.buildForm();
+    }
   }
 
   buildForm() {
