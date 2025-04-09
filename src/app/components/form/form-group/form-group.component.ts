@@ -9,10 +9,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormTextComponent } from '../form-text/form-text.component';
 import { FormTextareaComponent } from '../form-textarea/form-textarea.component';
 import { FormDropdownComponent } from '../form-dropdown/form-dropdown.component';
+import { FormCheckboxComponent } from '../form-checkbox/form-checkbox.component';
 
 @Component({
   selector: 'app-form-group',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, MatCheckboxModule, FormTextComponent, FormTextareaComponent, FormDropdownComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatRadioModule, MatSelectModule, FormTextComponent, FormTextareaComponent, FormDropdownComponent, FormCheckboxComponent],
   templateUrl: './form-group.component.html',
   styleUrl: './form-group.component.scss'
 })

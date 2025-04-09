@@ -20,11 +20,11 @@
       [field]="field"
     ></app-form-dropdown>
 
-    <ng-container *ngIf="field.type === 'Checkbox'">
-      <mat-checkbox formControlName="{{ field.key }}">{{
-        field.label
-      }}</mat-checkbox>
-    </ng-container>
+    <app-form-checkbox
+      *ngIf="field.type === 'Checkbox'"
+      [control]="getFormControl(field)"
+      [field]="field"
+    ></app-form-checkbox>
 
     <ng-container *ngIf="field.type === 'Radio button'">
       <label id="example-radio-group-label">{{ field.label }}</label>
