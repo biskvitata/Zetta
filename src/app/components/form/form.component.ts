@@ -34,7 +34,7 @@ export class FormComponent {
         this.form.addControl(field.key, this.createGroup(field.fields));
       } else {
         let validators: any
-        if(!field.dependencies) validators = this.getValidators(field.validation);
+        if(!field.visibilityDependencies) validators = this.getValidators(field.validation);
         this.form.addControl(field.key, new FormControl('', validators));
       }
     });
@@ -48,7 +48,7 @@ export class FormComponent {
         group.addControl(field.key, this.createGroup(field.fields));
       } else {
         let validators: any
-        if(!field.dependencies) validators = this.getValidators(field.validation);
+        if(!field.visibilityDependencies) validators = this.getValidators(field.validation);
         group.addControl(field.key, new FormControl('', validators));
       }
     });

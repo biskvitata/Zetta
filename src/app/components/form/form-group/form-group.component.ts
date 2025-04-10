@@ -36,26 +36,26 @@ export class FormGroupComponent implements OnInit {
     this.config.fields.forEach((field: any) => {
       this.visibleFields[field.key] = true;
 
-      if (field.dependencies && field.dependencies.length > 0) {
-        field.dependencies.forEach((dependency: any) => {
+      if (field.visibilityDependencies && field.visibilityDependencies.length > 0) {
+        field.visibilityDependencies.forEach((dependency: any) => {
           const dependencyControl = this.form.get(dependency.field);
 
           if (dependencyControl) {
             dependencyControl.valueChanges.subscribe(() => {
-              this.updateVisibility(field.key, field.dependencies);
+              this.updateVisibility(field.key, field.visibilityDependencies);
             });
           }
         });
 
-        this.updateVisibility(field.key, field.dependencies);
+        this.updateVisibility(field.key, field.visibilityDependencies);
       }
     });
   }
 
-  updateVisibility(fieldKey: string, dependencies: any[]) {
+  updateVisibility(fieldKey: string, visibilityDependencies: any[]) {
     let shouldBeVisible = true;
 
-    dependencies.forEach((dependency: any) => {
+    visibilityDependencies.forEach((dependency: any) => {
       const dependencyControl = this.form.get(dependency.field);
       if (dependencyControl && dependencyControl.value !== dependency.value) {
         shouldBeVisible = false;
@@ -67,8 +67,8 @@ export class FormGroupComponent implements OnInit {
 
   setupDynamicValidation() {
     this.config.fields.forEach((field: any) => {
-      if (field.dependencies && field.dependencies.length > 0) {
-        field.dependencies.forEach((dependency: any) => {
+      if (field.visibilityDependencies && field.visibilityDependencies.length > 0) {
+        field.visibilityDependencies.forEach((dependency: any) => {
           const dependencyControl = this.form.get(dependency.field);
           const currentControl = this.form.get(field.key);
 
@@ -79,13 +79,33 @@ export class FormGroupComponent implements OnInit {
           }
         });
       }
+
+      if (field.validationDependencies && field.validationDependencies.length > 0) {
+        field.validationDependencies.forEach((dependency: any) => {
+          const dependencyControl = this.form.get(dependency.field);
+          const currentControl = this.form.get(field.key);
+
+          if (dependencyControl && currentControl) {
+            dependencyControl.valueChanges.subscribe(() => {
+              this.updateValidation(currentControl, field, dependency);
+            });
+          }
+        });
+      }
     });
   }
 
-  updateValidation(control: any, field: any) {
+  updateValidation(control: any, field: any, validationDependency?: any) {
     let conditionsMet = true;
 
-    field.dependencies.forEach((dependency: any) => {
+    field.visibilityDependencies?.forEach((dependency: any) => {
+      const dependencyControl = this.form.get(dependency.field);
+      if (dependencyControl?.value !== dependency.value) {
+        conditionsMet = false;
+      }
+    });
+
+    field.validationDependencies?.forEach((dependency: any) => {
       const dependencyControl = this.form.get(dependency.field);
       if (dependencyControl?.value !== dependency.value) {
         conditionsMet = false;
@@ -93,7 +113,13 @@ export class FormGroupComponent implements OnInit {
     });
 
     if (conditionsMet) {
-      const validators = this.getValidators(field.validation);
+      let validators = this.getValidators(field.validation);
+      let additionalValidators
+
+      if (validationDependency) additionalValidators = this.getValidators(validationDependency.validation)
+
+      if (validationDependency) validators = [...validators || [], ...additionalValidators || []]
+
       control.setValidators(validators);
     } else {
       control.clearValidators();
