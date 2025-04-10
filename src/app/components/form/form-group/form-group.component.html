@@ -1,4 +1,4 @@
-<div *ngFor="let field of config.fields">
+<div *ngFor="let field of config.fields" class="form-field">
   <form [formGroup]="form">
     <ng-container *ngIf="visibleFields[field.key]">
       <label *ngIf="field.type === 'Group'">{{ field.label }}</label>

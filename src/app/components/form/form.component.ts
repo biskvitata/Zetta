@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { FormGroupComponent } from './form-group/form-group.component';
 import { FormsPrefillService } from '../../services/forms-prefill.service';
 import { HttpClientModule } from '@angular/common/http';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-form',
-  imports: [CommonModule, ReactiveFormsModule, FormStructureInputComponent, FormGroupComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormStructureInputComponent, FormGroupComponent, MatCardModule],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
