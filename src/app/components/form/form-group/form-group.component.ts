@@ -129,6 +129,8 @@ export class FormGroupComponent implements OnInit {
     const validators: ValidatorFn[] = [];
     if (validation?.required) validators.push(Validators.required);
     if (validation?.regex) validators.push(Validators.pattern(validation.regex));
+    if (validation.minLength) validators.push(Validators.minLength(validation.minLength))
+    if (validation.maxLength) validators.push(Validators.maxLength(validation.maxLength))
     return validators;
   }
 }

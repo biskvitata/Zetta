@@ -38,7 +38,7 @@ export class FormComponent {
   buildForm(): void {
     this.form = this.fb.group({});
 
-    if (this.formStructure?.services) {
+    if (this.formStructure?.services?.dataService) {
       this.getFormData(this.formStructure.services.dataService);
     }
 
@@ -53,6 +53,8 @@ export class FormComponent {
         this.form.addControl(field.key, new FormControl('', validators));
       }
     });
+
+    this.formReady = true;
   }
 
   createGroup(fields: Field[]): FormGroup {
@@ -76,12 +78,10 @@ export class FormComponent {
     const validators = [];
 
     if (validation) {
-      if (validation.required) {
-        validators.push(Validators.required);
-      }
-      if (validation.regex) {
-        validators.push(Validators.pattern(validation.regex));
-      }
+      if (validation.required) validators.push(Validators.required);
+      if (validation.regex) validators.push(Validators.pattern(validation.regex));
+      if (validation.minLength) validators.push(Validators.minLength(validation.minLength))
+      if (validation.maxLength) validators.push(Validators.maxLength(validation.maxLength))
     }
 
     return validators;
@@ -104,7 +104,5 @@ export class FormComponent {
     if (data) {
       this.form.patchValue(data);
     }
-
-    this.formReady = true;
   }
 }

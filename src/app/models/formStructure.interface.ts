@@ -1,7 +1,7 @@
 export interface FormStructure {
   formInfo: FormInfo;
   fields: Field[];
-  services: FormServices;
+  services?: FormServices;
 }
 
 export interface FormInfo {
@@ -27,6 +27,8 @@ export interface Field {
 export interface FieldValidation {
   required: boolean;
   regex: string;
+  minLength: number;
+  maxLength: number;
 }
 
 export interface ValidationDependency {
