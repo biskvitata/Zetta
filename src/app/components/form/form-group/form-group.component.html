@@ -1,4 +1,4 @@
-<div *ngFor="let field of config.fields">
+<div *ngFor="let field of config.fields" class="form-field">
   <form [formGroup]="form">
     <ng-container *ngIf="visibleFields[field.key]">
       <label *ngIf="field.type === 'Group'">{{ field.label }}</label>
@@ -34,10 +34,12 @@
       ></app-form-radio>
 
       <div *ngIf="field.type === 'Group'" formGroupName="{{ field.key }}">
-        <app-form-group
-          [form]="getFormGroup(field)"
-          [config]="field"
-        ></app-form-group>
+        <mat-card class="group-wrapper" appearance="outlined">
+          <app-form-group
+            [form]="getFormGroup(field)"
+            [config]="field"
+          ></app-form-group>
+        </mat-card>
       </div>
     </ng-container>
   </form>

@@ -6,6 +6,7 @@ import { FormTextareaComponent } from '../form-textarea/form-textarea.component'
 import { FormDropdownComponent } from '../form-dropdown/form-dropdown.component';
 import { FormCheckboxComponent } from '../form-checkbox/form-checkbox.component';
 import { FormRadioComponent } from '../form-radio/form-radio.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-form-group',
@@ -17,7 +18,8 @@ import { FormRadioComponent } from '../form-radio/form-radio.component';
     FormTextareaComponent,
     FormDropdownComponent,
     FormCheckboxComponent,
-    FormRadioComponent
+    FormRadioComponent,
+    MatCardModule
   ],
   templateUrl: './form-group.component.html',
   styleUrls: ['./form-group.component.scss']
