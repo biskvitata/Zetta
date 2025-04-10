@@ -1,42 +1,44 @@
 <div *ngFor="let field of config.fields">
   <form [formGroup]="form">
-    <label *ngIf="field.type === 'Group'">{{ field.label }}</label>
+    <ng-container *ngIf="visibleFields[field.key]">
+      <label *ngIf="field.type === 'Group'">{{ field.label }}</label>
 
-    <app-form-text
-      *ngIf="field.type === 'Text'"
-      [control]="getFormControl(field)"
-      [field]="field"
-    ></app-form-text>
+      <app-form-text
+        *ngIf="field.type === 'Text'"
+        [control]="getFormControl(field)"
+        [field]="field"
+      ></app-form-text>
 
-    <app-form-textarea
-      *ngIf="field.type === 'Textarea'"
-      [control]="getFormControl(field)"
-      [field]="field"
-    ></app-form-textarea>
+      <app-form-textarea
+        *ngIf="field.type === 'Textarea'"
+        [control]="getFormControl(field)"
+        [field]="field"
+      ></app-form-textarea>
 
-    <app-form-dropdown
-      *ngIf="field.type === 'Dropdown'"
-      [control]="getFormControl(field)"
-      [field]="field"
-    ></app-form-dropdown>
+      <app-form-dropdown
+        *ngIf="field.type === 'Dropdown'"
+        [control]="getFormControl(field)"
+        [field]="field"
+      ></app-form-dropdown>
 
-    <app-form-checkbox
-      *ngIf="field.type === 'Checkbox'"
-      [control]="getFormControl(field)"
-      [field]="field"
-    ></app-form-checkbox>
+      <app-form-checkbox
+        *ngIf="field.type === 'Checkbox'"
+        [control]="getFormControl(field)"
+        [field]="field"
+      ></app-form-checkbox>
 
-    <app-form-radio
-      *ngIf="field.type === 'Radio button'"
-      [control]="getFormControl(field)"
-      [field]="field"
-    ></app-form-radio>
+      <app-form-radio
+        *ngIf="field.type === 'Radio button'"
+        [control]="getFormControl(field)"
+        [field]="field"
+      ></app-form-radio>
 
-    <div *ngIf="field.type === 'Group'" formGroupName="{{ field.key }}">
-      <app-form-group
-        [form]="getFormGroup(field)"
-        [config]="field"
-      ></app-form-group>
-    </div>
+      <div *ngIf="field.type === 'Group'" formGroupName="{{ field.key }}">
+        <app-form-group
+          [form]="getFormGroup(field)"
+          [config]="field"
+        ></app-form-group>
+      </div>
+    </ng-container>
   </form>
 </div>
