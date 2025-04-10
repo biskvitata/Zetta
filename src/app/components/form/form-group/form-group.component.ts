@@ -24,4 +24,15 @@ export class FormGroupComponent {
   getFormControl(field: any) {
     return this.form.get(field.key) as FormControl;
   }
+
+  getFieldVisibility(field: any) {
+    if (!field.dependencies) return true;
+
+    const conditions = Array.isArray(field.dependencies) ? field.dependencies : [field.dependencies];
+
+    return conditions.every((condition: any) => {
+      const key = Object.keys(condition)[0];
+      return this.form.controls[key]?.value === condition[key];
+    });
+  }
 }
