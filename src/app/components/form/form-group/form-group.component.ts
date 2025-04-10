@@ -7,6 +7,7 @@ import { FormDropdownComponent } from '../form-dropdown/form-dropdown.component'
 import { FormCheckboxComponent } from '../form-checkbox/form-checkbox.component';
 import { FormRadioComponent } from '../form-radio/form-radio.component';
 import { MatCardModule } from '@angular/material/card';
+import { Field, ValidationDependency, VisibilityDependency } from '../../../models/formStructure.interface';
 
 @Component({
   selector: 'app-form-group',
@@ -30,40 +31,47 @@ export class FormGroupComponent implements OnInit {
 
   visibleFields: Record<string, boolean> = {};
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.config?.fields && Array.isArray(this.config.fields)) {
       this.initializeFields();
     }
   }
 
-  getFormGroup(field: any) { return this.form.get(field.key) as FormGroup; } 
-  getFormControl(field: any) { return this.form.get(field.key) as FormControl; }
+  getFormGroup(field: Field): FormGroup {
+    return this.form.get(field.key) as FormGroup;
+  }
 
-  private initializeFields() {
-    this.config.fields.forEach((field: any) => {
+  getFormControl(field: Field): FormControl {
+    return this.form.get(field.key) as FormControl;
+  }
+
+  private initializeFields(): void {
+    this.config.fields.forEach((field: Field) => {
       this.setupVisibility(field);
       this.setupValidation(field);
     });
   }
 
-  private setupVisibility(field: any) {
+  private setupVisibility(field: Field): void {
     this.visibleFields[field.key] = true;
 
     if (field.visibilityDependencies?.length) {
-      field.visibilityDependencies.forEach((dependency: any) => {
+      field.visibilityDependencies.forEach((dependency: VisibilityDependency) => {
         const dependencyControl = this.form.get(dependency.field);
         dependencyControl?.valueChanges.subscribe(() => {
-          this.updateVisibility(field.key, field.visibilityDependencies);
+          if (field.visibilityDependencies) {
+            this.updateVisibility(field.key, field.visibilityDependencies);
+          }
         });
       });
       this.updateVisibility(field.key, field.visibilityDependencies);
     }
   }
 
-  private setupValidation(field: any) {
+  private setupValidation(field: Field): void {
     const currentControl = this.form.get(field.key);
 
-    field.visibilityDependencies?.forEach((dependency: any) => {
+    field.visibilityDependencies?.forEach((dependency: VisibilityDependency) => {
       const dependencyControl = this.form.get(dependency.field);
       dependencyControl?.valueChanges.subscribe(() => {
         if (currentControl) {
@@ -72,7 +80,7 @@ export class FormGroupComponent implements OnInit {
       });
     });
 
-    field.validationDependencies?.forEach((dependency: any) => {
+    field.validationDependencies?.forEach((dependency: ValidationDependency) => {
       const dependencyControl = this.form.get(dependency.field);
       dependencyControl?.valueChanges.subscribe(() => {
         if (currentControl) {
@@ -82,8 +90,8 @@ export class FormGroupComponent implements OnInit {
     });
   }
 
-  private updateVisibility(fieldKey: string, visibilityDependencies: any[]) {
-    this.visibleFields[fieldKey] = visibilityDependencies.every((dependency: any) => {
+  private updateVisibility(fieldKey: string, visibilityDependencies: VisibilityDependency[]): void {
+    this.visibleFields[fieldKey] = visibilityDependencies.every((dependency: VisibilityDependency) => {
       const dependencyControl = this.form.get(dependency.field);
       return dependencyControl?.value === dependency.value;
     });
@@ -91,15 +99,15 @@ export class FormGroupComponent implements OnInit {
 
   private updateValidation(
     control: FormControl | null,
-    field: any,
-    validationDependency?: any
-  ) {
+    field: Field,
+    validationDependency?: ValidationDependency
+  ): void {
     if (!control) return;
 
     const conditionsMet = [
       ...(field.visibilityDependencies || []),
       ...(field.validationDependencies || [])
-    ].every((dependency: any) => {
+    ].every((dependency: ValidationDependency | VisibilityDependency) => {
       const dependencyControl = this.form.get(dependency.field);
       return dependencyControl?.value === dependency.value;
     });

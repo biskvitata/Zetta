@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { Field } from '../../../models/formStructure.interface';
 
 @Component({
   selector: 'app-form-dropdown',
@@ -11,5 +12,5 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class FormDropdownComponent {
   @Input() control!: FormControl;
-  @Input() field!: any;
+  @Input() field!: Field;
 }
