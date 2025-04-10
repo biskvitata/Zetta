@@ -1,0 +1,11 @@
+<mat-form-field>
+  <mat-label>{{ field.label }}</mat-label>
+  <textarea
+    matInput
+    [formControl]="control"
+    [placeholder]="field.placeholder"
+  ></textarea>
+  @if (control.errors?.['required']) {
+  <mat-error>{{ field.label }} is required</mat-error>
+  }
+</mat-form-field>

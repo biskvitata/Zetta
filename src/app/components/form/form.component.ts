@@ -3,11 +3,11 @@ import { FormStructureInputComponent } from './form-structure-input/form-structu
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { FormFieldComponent } from './form-field/form-field.component';
+import { FormGroupComponent } from './form-group/form-group.component';
 
 @Component({
   selector: 'app-form',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, FormStructureInputComponent, FormFieldComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormStructureInputComponent, FormGroupComponent],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })

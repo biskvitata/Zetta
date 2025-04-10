@@ -1,12 +1,10 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-form-structure-input',
-  imports: [FormsModule, MatFormFieldModule, MatInputModule, CommonModule],
+  imports: [MatInputModule, CommonModule],
   templateUrl: './form-structure-input.component.html',
   styleUrl: './form-structure-input.component.scss'
 })

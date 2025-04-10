@@ -1,0 +1,13 @@
+<label id="radio-group-label">{{ field.label }}</label>
+
+<mat-radio-group
+  aria-labelledby="radio-group-label"
+  class="form-radio-group"
+  [formControl]="control"
+>
+  @for (option of field.options; track option) {
+  <mat-radio-button class="form-radio-group-button" [value]="option">{{
+    option
+  }}</mat-radio-button>
+  }
+</mat-radio-group>
