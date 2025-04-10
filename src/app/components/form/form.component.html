@@ -10,6 +10,6 @@
 
     <app-form-group [form]="form" [config]="formStructure"></app-form-group>
 
-    <button type="submit">Submit</button>
+    <button type="submit" [disabled]="!form.valid">Submit</button>
   </form></ng-container
 >

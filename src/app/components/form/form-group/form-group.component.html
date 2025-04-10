@@ -1,6 +1,6 @@
 <div *ngFor="let field of config.fields">
   <form [formGroup]="form">
-    <ng-container *ngIf="getFieldVisibility(field)">
+    <ng-container *ngIf="visibleFields[field.key]">
       <label *ngIf="field.type === 'Group'">{{ field.label }}</label>
 
       <app-form-text

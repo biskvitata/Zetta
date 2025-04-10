@@ -33,7 +33,8 @@ export class FormComponent {
       if (field.type === 'Group') {
         this.form.addControl(field.key, this.createGroup(field.fields));
       } else {
-        const validators = this.getValidators(field.validation);
+        let validators: any
+        if(!field.dependencies) validators = this.getValidators(field.validation);
         this.form.addControl(field.key, new FormControl('', validators));
       }
     });
@@ -46,7 +47,8 @@ export class FormComponent {
       if (field.type === 'Group') {
         group.addControl(field.key, this.createGroup(field.fields));
       } else {
-        const validators = this.getValidators(field.validation);
+        let validators: any
+        if(!field.dependencies) validators = this.getValidators(field.validation);
         group.addControl(field.key, new FormControl('', validators));
       }
     });
