@@ -109,7 +109,7 @@ export class FormGroupComponent implements OnInit {
             ? this.getValidators(validationDependency.validation)
             : [])
         ]
-      : [];
+      : (this.visibleFields[field.key] ? this.getValidators(field.validation) : []);
 
     control.setValidators(validators);
     control.updateValueAndValidity();
