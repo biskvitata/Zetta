@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { FormTextComponent } from '../form-text/form-text.component';
 import { FormTextareaComponent } from '../form-textarea/form-textarea.component';
 import { FormDropdownComponent } from '../form-dropdown/form-dropdown.component';
@@ -9,104 +9,116 @@ import { FormRadioComponent } from '../form-radio/form-radio.component';
 
 @Component({
   selector: 'app-form-group',
-  imports: [CommonModule, ReactiveFormsModule, FormTextComponent, FormTextareaComponent, FormDropdownComponent, FormCheckboxComponent, FormRadioComponent],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormTextComponent,
+    FormTextareaComponent,
+    FormDropdownComponent,
+    FormCheckboxComponent,
+    FormRadioComponent
+  ],
   templateUrl: './form-group.component.html',
-  styleUrl: './form-group.component.scss'
+  styleUrls: ['./form-group.component.scss']
 })
 export class FormGroupComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() config!: any;
 
-  visibleFields: any = {};
+  visibleFields: Record<string, boolean> = {};
 
   ngOnInit() {
-    this.setupDynamicVisibility();
-    this.setupDynamicValidation();
-  }
-
-  getFormGroup(field: any) {
-    return this.form.get(field.key) as FormGroup;
-  }
-
-  getFormControl(field: any) {
-    return this.form.get(field.key) as FormControl;
-  }
-
-  setupDynamicVisibility() {
-    this.config.fields.forEach((field: any) => {
-      this.visibleFields[field.key] = true;
-
-      if (field.dependencies && field.dependencies.length > 0) {
-        field.dependencies.forEach((dependency: any) => {
-          const dependencyControl = this.form.get(dependency.field);
-
-          if (dependencyControl) {
-            dependencyControl.valueChanges.subscribe(() => {
-              this.updateVisibility(field.key, field.dependencies);
-            });
-          }
-        });
-
-        this.updateVisibility(field.key, field.dependencies);
-      }
-    });
-  }
-
-  updateVisibility(fieldKey: string, dependencies: any[]) {
-    let shouldBeVisible = true;
-
-    dependencies.forEach((dependency: any) => {
-      const dependencyControl = this.form.get(dependency.field);
-      if (dependencyControl && dependencyControl.value !== dependency.value) {
-        shouldBeVisible = false;
-      }
-    });
-
-    this.visibleFields[fieldKey] = shouldBeVisible;
-  }
-
-  setupDynamicValidation() {
-    this.config.fields.forEach((field: any) => {
-      if (field.dependencies && field.dependencies.length > 0) {
-        field.dependencies.forEach((dependency: any) => {
-          const dependencyControl = this.form.get(dependency.field);
-          const currentControl = this.form.get(field.key);
-
-          if (dependencyControl && currentControl) {
-            dependencyControl.valueChanges.subscribe(() => {
-              this.updateValidation(currentControl, field);
-            });
-          }
-        });
-      }
-    });
-  }
-
-  updateValidation(control: any, field: any) {
-    let conditionsMet = true;
-
-    field.dependencies.forEach((dependency: any) => {
-      const dependencyControl = this.form.get(dependency.field);
-      if (dependencyControl?.value !== dependency.value) {
-        conditionsMet = false;
-      }
-    });
-
-    if (conditionsMet) {
-      const validators = this.getValidators(field.validation);
-      control.setValidators(validators);
-    } else {
-      control.clearValidators();
+    if (this.config?.fields && Array.isArray(this.config.fields)) {
+      this.initializeFields();
     }
+  }
+
+  getFormGroup(field: any) { return this.form.get(field.key) as FormGroup; } 
+  getFormControl(field: any) { return this.form.get(field.key) as FormControl; }
+
+  private initializeFields() {
+    this.config.fields.forEach((field: any) => {
+      this.setupVisibility(field);
+      this.setupValidation(field);
+    });
+  }
+
+  private setupVisibility(field: any) {
+    this.visibleFields[field.key] = true;
+
+    if (field.visibilityDependencies?.length) {
+      field.visibilityDependencies.forEach((dependency: any) => {
+        const dependencyControl = this.form.get(dependency.field);
+        dependencyControl?.valueChanges.subscribe(() => {
+          this.updateVisibility(field.key, field.visibilityDependencies);
+        });
+      });
+      this.updateVisibility(field.key, field.visibilityDependencies);
+    }
+  }
+
+  private setupValidation(field: any) {
+    const currentControl = this.form.get(field.key);
+
+    field.visibilityDependencies?.forEach((dependency: any) => {
+      const dependencyControl = this.form.get(dependency.field);
+      dependencyControl?.valueChanges.subscribe(() => {
+        if (currentControl) {
+          this.updateValidation(currentControl as FormControl, field);
+        }
+      });
+    });
+
+    field.validationDependencies?.forEach((dependency: any) => {
+      const dependencyControl = this.form.get(dependency.field);
+      dependencyControl?.valueChanges.subscribe(() => {
+        if (currentControl) {
+          this.updateValidation(currentControl as FormControl, field, dependency);
+        }
+      });
+    });
+  }
+
+  private updateVisibility(fieldKey: string, visibilityDependencies: any[]) {
+    this.visibleFields[fieldKey] = visibilityDependencies.every((dependency: any) => {
+      const dependencyControl = this.form.get(dependency.field);
+      return dependencyControl?.value === dependency.value;
+    });
+  }
+
+  private updateValidation(
+    control: FormControl | null,
+    field: any,
+    validationDependency?: any
+  ) {
+    if (!control) return;
+
+    const conditionsMet = [
+      ...(field.visibilityDependencies || []),
+      ...(field.validationDependencies || [])
+    ].every((dependency: any) => {
+      const dependencyControl = this.form.get(dependency.field);
+      return dependencyControl?.value === dependency.value;
+    });
+
+    const validators = conditionsMet
+      ? [
+          ...this.getValidators(field.validation),
+          ...(validationDependency
+            ? this.getValidators(validationDependency.validation)
+            : [])
+        ]
+      : [];
+
+    control.setValidators(validators);
     control.updateValueAndValidity();
   }
 
-  getValidators(validation: any) {
-    const validators = [];
-    if (validation) {
-      if (validation.required) validators.push(Validators.required);
-      if (validation.regex) validators.push(Validators.pattern(validation.regex));
-    }
+  private getValidators(validation: any): ValidatorFn[] {
+    const validators: ValidatorFn[] = [];
+    if (validation?.required) validators.push(Validators.required);
+    if (validation?.regex) validators.push(Validators.pattern(validation.regex));
     return validators;
   }
 }
