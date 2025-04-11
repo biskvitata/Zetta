@@ -6,6 +6,7 @@ import { FormGroupComponent } from './form-group/form-group.component';
 import { FormsPrefillService } from '../../services/forms-prefill.service';
 import { MatCardModule } from '@angular/material/card';
 import { Field, FormStructure } from '../../models/formStructure.interface';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-form',
@@ -14,7 +15,8 @@ import { Field, FormStructure } from '../../models/formStructure.interface';
     ReactiveFormsModule,
     FormStructureInputComponent,
     FormGroupComponent,
-    MatCardModule
+    MatCardModule,
+    MatButton
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'

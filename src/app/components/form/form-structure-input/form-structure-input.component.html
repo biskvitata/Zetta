@@ -1,7 +1,15 @@
-<mat-form-field>
+<h1>Example Form Builder from JSON</h1>
+
+<mat-form-field class="form-structure-input">
   <mat-label>Enter JSON here</mat-label>
 
-  <textarea matInput (input)="onValueChange($event)"></textarea>
+  <textarea
+    matInput
+    cdkTextareaAutosize
+    cdkAutosizeMinRows="30"
+    cdkAutosizeMaxRows="50"
+    (input)="onValueChange($event)"
+  ></textarea>
 
   <mat-hint *ngIf="showErrorMessage"
     >Please provide correct JSON structure</mat-hint
