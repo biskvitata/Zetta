@@ -40,10 +40,6 @@ export class FormComponent {
   buildForm(): void {
     this.form = this.fb.group({});
 
-    if (this.formStructure?.services?.dataService) {
-      this.getFormData(this.formStructure.services.dataService);
-    }
-
     this.formStructure?.fields?.forEach((field: Field) => {
       if (field.type === 'Group' && field.fields) {
         this.form.addControl(field.key, this.createGroup(field.fields));
@@ -55,6 +51,10 @@ export class FormComponent {
         this.form.addControl(field.key, new FormControl('', validators));
       }
     });
+
+    if (this.formStructure?.services?.dataService) {
+      this.getFormData(this.formStructure.services.dataService);
+    }
 
     this.formReady = true;
   }
@@ -104,7 +104,7 @@ export class FormComponent {
 
   prefillForm(data: any): void {
     if (data) {
-      this.form.patchValue(data);
+      this.form?.patchValue(data);
     }
   }
 }

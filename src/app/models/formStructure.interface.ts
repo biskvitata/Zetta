@@ -25,10 +25,10 @@ export interface Field {
 }
 
 export interface FieldValidation {
-  required: boolean;
-  regex: string;
-  minLength: number;
-  maxLength: number;
+  required?: boolean;
+  regex?: string;
+  minLength?: number;
+  maxLength?: number;
 }
 
 export interface ValidationDependency {
