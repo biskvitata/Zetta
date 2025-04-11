@@ -1,20 +1,23 @@
-<h1>Example Form Builder from JSON</h1>
+<div class="form-page">
+  <app-form-structure-input
+    (valueChange)="onJSONInputChange($event)"
+  ></app-form-structure-input>
 
-<app-form-structure-input
-  (valueChange)="onJSONInputChange($event)"
-></app-form-structure-input>
+  <ng-container *ngIf="formReady">
+    <mat-card class="form-wrapper" appearance="outlined"
+      ><mat-card-header>
+        <mat-card-title>{{ formStructure.formInfo.title }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <app-form-group
+            [form]="form"
+            [config]="formStructure"
+          ></app-form-group>
 
-<ng-container *ngIf="formReady">
-  <mat-card class="form-wrapper" appearance="outlined"
-    ><mat-card-header>
-      <mat-card-title>{{ formStructure.formInfo.title }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="submit()">
-        <app-form-group [form]="form" [config]="formStructure"></app-form-group>
-
-        <button type="submit" [disabled]="!form.valid">Submit</button>
-      </form>
-    </mat-card-content></mat-card
-  >
-</ng-container>
+          <button mat-raised-button [disabled]="!form.valid">Submit</button>
+        </form>
+      </mat-card-content></mat-card
+    >
+  </ng-container>
+</div>
